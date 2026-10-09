@@ -1,0 +1,42 @@
+# Name: 周沐阳
+# Student ID: B24040717
+
+	.pos 0
+	irmovq stack, %rsp
+	irmovq src, %rdi
+	irmovq dest, %rsi
+	irmovq $3, %rdx
+	call copy_block
+	halt
+
+	.align 8
+src:
+	.quad 0x00a
+	.quad 0x0b0
+	.quad 0xc00
+dest:
+	.quad 0x111
+	.quad 0x222
+	.quad 0x333
+
+# long copy_block(long *src, long *dest, long len).
+# Arguments are in %rdi, %rsi, and %rdx; result is returned in %rax.
+copy_block:
+	xorq %rax, %rax
+	irmovq $8, %r9
+	irmovq $1, %r10
+test:
+	andq %rdx, %rdx
+	jle done
+	mrmovq 0(%rdi), %r8
+	rmmovq %r8, 0(%rsi)
+	xorq %r8, %rax
+	addq %r9, %rdi
+	addq %r9, %rsi
+	subq %r10, %rdx
+	jmp test
+done:
+	ret
+
+	.pos 0x200
+stack:

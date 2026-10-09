@@ -1,0 +1,36 @@
+# Name: 周沐阳
+# Student ID: B24040717
+
+	.pos 0
+	irmovq stack, %rsp
+	irmovq ele1, %rdi
+	call sum_list
+	halt
+
+# Linked list: each element stores a value followed by the next pointer.
+	.align 8
+ele1:
+	.quad 0x00a
+	.quad ele2
+ele2:
+	.quad 0x0b0
+	.quad ele3
+ele3:
+	.quad 0xc00
+	.quad 0
+
+# long sum_list(list_ptr ls), with ls in %rdi and result in %rax.
+sum_list:
+	xorq %rax, %rax
+loop:
+	andq %rdi, %rdi
+	je done
+	mrmovq 0(%rdi), %r8
+	addq %r8, %rax
+	mrmovq 8(%rdi), %rdi
+	jmp loop
+done:
+	ret
+
+	.pos 0x200
+stack:
